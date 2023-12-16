@@ -38,7 +38,7 @@ function App() {
   let socket = useRef()
 
   useEffect(() => {
-    socket.current = io('http://165.232.179.170:5094/');
+    socket.current = io('https://api.hackfake.swalah.co/');
 
     socket.current.on('connect', () => {
       console.log('socket connected');
