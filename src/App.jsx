@@ -22,15 +22,6 @@ import tinkerLogo from './assets/tinkerlogo.png'
 import Pro from './components/Pro/Pro'
 import Header from './components/Header/Header'
 
-
-
-
-let data = [
-  { amountDonated: 1000, subscriberName: 'John snow', subscriberEmail: 'johnsnow@mail.com' },
-  { amountDonated: 3000, subscriberName: 'Ned Stark', subscriberEmail: 'nedstark@gmailo.com' },
-  { amountDonated: 4900, subscriberName: 'Rob Stark', subscriberEmail: 'robstark@gmail.com' }
-]
-
 function App() {
 
   const theme = createTheme({
@@ -40,44 +31,38 @@ function App() {
     },
   });
 
-  let RAZORPAY_URL = import.meta.env.VITE_RAZORPAY_URL
-  let RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
-  let RAZORPAY_KEY_SECRET = import.meta.env.VITE_RAZORPAY_KEY_SECRET
-
-  let [payeeArray, setPayeeArray] = useState([...data])
-  let [payee, setPayee] = useState('hasif')
   let [open, setOpen] = useState(!true)
-  let [total, setTotal] = useState(0)
-  let [payment, setPayment] = useState(0)
-  let [count, setCount] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [count, setCount] = useState(0)
 
   let socket = useRef()
 
   useEffect(() => {
-    socket.current = io('http://tinker.grocy.online/', {
-      transports: ['websocket'],
-      path: '/razorpay/socket.io'
-    })
+    socket.current = io('http://165.232.179.170:5094/');
 
     socket.current.on('connect', () => {
       console.log('socket connected');
     })
 
 
-    socket.current.on('subscription_activated', (res) => {
+    socket.current.on('updateData', (res) => {
+      const {
+        totalContribution,
+        totalContributors
+      } = res;
+      
+      console.log("🚀 ~ file: App.jsx:65 ~ socket.current.on ~ res:", {
+        totalContribution: typeof totalContribution,
+        totalContributors: typeof totalContributors
+      })
 
-      setPayeeArray([...payeeArray, res])
-      setPayment(res.amountDonated)
-      setPayee(res.subscriberEmail)
+      if (totalContribution && totalContributors) {
+        
+        setCount(Number(totalContributors));
+        setTotal(Number(totalContribution));
+        
+      }
 
-      setTotal((prevTotal) => prevTotal + res.amountDonated)
-      setOpen(true)
-
-      setCount((c) => c + 1)
-
-      setTimeout(() => {
-        setOpen(false)
-      }, 3000)
     })
 
     return () => {
@@ -86,46 +71,6 @@ function App() {
       })
     }
   }, [])
-
-
-  useEffect(() => {
-
-    axios.get('http://tinker.grocy.online/payment/total').then((res) => {
-      // console.log(res);
-      setTotal(res.data.totalDonation)
-    }).catch((err) => {
-      console.log(err);
-    })
-
-    axios.get('http://tinker.grocy.online/subcription/all').then((res) => {
-      // console.log(res);
-      let c = res.data.result.length
-      setCount(c)
-    }).catch((err) => {
-      console.log(err);
-    })
-    // setTimeout(() => { setOpen(false) }, 3000)
-
-  }, [])
-
-
-
-  // *** countdown timer configuration ***************
-  const [time, setTime] = useState(false)
-  useEffect(() => {
-    let now = new Date()
-    let start = new Date(2023, 11, 15, 23, 59, 59, 999)
-    let countdown = start - now
-
-    let timer = setTimeout(() => {
-      setTime(true)
-    }, countdown)
-  }, [])
-
-  const t = new Date();
-  t.setSeconds(t.getSeconds() + (60 * 60 * 24 * 2))
-  // ===================================================
-
 
   // ***lottifiles GIF default configuration**********
   const defaultOptions = {
