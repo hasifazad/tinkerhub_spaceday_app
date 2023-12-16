@@ -2,10 +2,10 @@
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 6rem;
-    border-radius: 20px;
-    background-color: rgb(205, 192, 217);
-    /* border: 1px solid; */
+    height: 4rem;
+    border-radius: 50px;
+    background-color: #1B2720;
+    border: 1px solid #1B2720;
 }
 
 .progressPercent {
@@ -59,13 +59,15 @@
     display: flex;
     justify-content: end;
     align-items: center;
-    padding-top: 1.5rem;
+    /* padding-top: 1.5rem; */
     /* background-color: green; */
     transition: width 5s ease-out-in;
     /* animation: colorChange 10s infinite; */
-    background: linear-gradient(to right, rgb(59, 223, 130), rgb(111, 111, 223), rgb(209, 51, 234));
+    /* background: linear-gradient(to right, rgb(59, 223, 130), rgb(111, 111, 223), rgb(209, 51, 234)); */
+    background-color: #A9EAC4;
     background-size: 200% 100%;
     animation: gradientChange 10s infinite;
+    border-radius: 50px;
     /* border: 1px solid; */
 }
 

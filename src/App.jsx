@@ -13,14 +13,14 @@ import sound from './assets/sound.mp3'
 
 import BasicModal from './components/Modal/Modal'
 import axios from 'axios'
-import NameRole from './components/NameRole/NameRole'
 import Myprogress from './components/ProgressBar/ProgressBar'
 import { Socket, io } from 'socket.io-client'
 
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
-import BubbleContainer from './components/Bubble/Bubble'
 import tinkerLogo from './assets/tinkerlogo.png'
+import Pro from './components/Pro/Pro'
+import Header from './components/Header/Header'
 
 
 
@@ -35,7 +35,8 @@ function App() {
 
   const theme = createTheme({
     typography: {
-      fontFamily: 'Inter, sans-serif', // Replace with your preferred font family
+      fontFamily: 'ClashDisplaySemiBold', // Replace with your preferred font family
+
     },
   });
 
@@ -45,7 +46,7 @@ function App() {
 
   let [payeeArray, setPayeeArray] = useState([...data])
   let [payee, setPayee] = useState('hasif')
-  let [open, setOpen] = useState(true)
+  let [open, setOpen] = useState(!true)
   let [total, setTotal] = useState(0)
   let [payment, setPayment] = useState(0)
   let [count, setCount] = useState(0)
@@ -103,7 +104,7 @@ function App() {
     }).catch((err) => {
       console.log(err);
     })
-    setTimeout(() => { setOpen(false) }, 3000)
+    // setTimeout(() => { setOpen(false) }, 3000)
 
   }, [])
 
@@ -138,27 +139,32 @@ function App() {
 
   return (
     <>
+      <Header />
       <ThemeProvider theme={theme}>
         <Container sx={{ paddingTop: '5rem', display: 'flex', alignItems: 'center' }}>
           <Grid container alignItems='center'>
 
 
             <Grid item xs={12} >
-              <Grid container display='flex' justifyContent='space-between'>
+              <Grid container display='flex' justifyContent='center'>
 
+                <Grid item justifyContent='center' alignItems='center'>
+                  <Typography variant='h2' textAlign='center' sx={{ color: '#1B2720' }}>Your Contribution. Our Innovation</Typography>
+                  <Typography textAlign='center' sx={{ color: '#1B2720', fontFamily: 'ClashDisplayRegular' }} >Track the growth of TinkerSpace Carnival — every step forward is a leap for innovation, powered by your support</Typography>
+                </Grid>
                 {/* <Grid item xs={4}>
                 {time ? <Timer expiryTimestamp={t} /> : <Typography variant='h2'>00:00:00</Typography>}
               </Grid> */}
 
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <Typography theme={theme} fontWeight={600} variant='h3' color='error'>BE A PATRON</Typography>
-                  {/* <Typography variant='h5' textAlign='end'>
+                  <Typography variant='h5' textAlign='end'>
                   We are <span style={{ fontWeight: 'bold', fontSize: '30px', color: 'green' }}>₹{100000 - total}</span> closer to reach our goal!🤩
-                </Typography> */}
+                </Typography>
                 </Grid>
                 <Grid item xs={6} display='flex' justifyContent='end' alignItems='center'>
                   <img src={tinkerLogo} alt='tinkerhub_logo' height={100} width={200} />
-                </Grid>
+                </Grid> */}
                 {/* <Grid item display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                 <Typography textAlign='center' variant='h4'>01/01/2023</Typography>
                 <br />
@@ -170,18 +176,18 @@ function App() {
             <Grid item xs={12} paddingTop={6} paddingBottom={3}>
               {/* <Typography sx={{ fontWeight: 'bold' }} variant='h4' textAlign='end'> ₹ 100K</Typography> */}
               <Myprogress total={total} count={count} />
+              <Pro total={total} count={count} />
             </Grid>
 
             <Grid item xs={12} >
               <Grid container justifyContent='center'>
 
-                <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
-                  {/* <NameRole people={payeeArray} /> */}
+                {/* <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
+                  <NameRole people={payeeArray} />
+                  <BubbleContainer numberOfBubbles={10} />
+                </Grid> */}
 
-                  {/* <BubbleContainer numberOfBubbles={10} /> */}
-                </Grid>
-
-                <Grid item xs={4} display='flex' flexDirection='column' justifyContent='center' alignItems='center' paddingTop={3}>
+                {/* <Grid item xs={4} display='flex' flexDirection='column' justifyContent='center' alignItems='center' paddingTop={3}>
                   <Box sx={{ borderRadius: '50%', width: '175px', height: '175px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography variant='h1' color='error' display='flex' justifyContent='center'>
                       {count}
@@ -191,16 +197,23 @@ function App() {
                     </Typography>
                   </Box>
 
-                  {/* <Lottie
+                  <Lottie
                   options={{ ...animationData, animationData: animationFund }}
                   height={225}
                   width={225}
-                /> */}
-                </Grid>
+                />
+                </Grid> */}
 
-                <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
+                <Grid item xs={4} justifyContent='center' alignItems='center'>
                   {/* <img src={tinkerqr} height={250} width={250} /> */}
-
+                  <Typography variant='h5' textAlign='center' sx={{ color: '#1B2720', fontFamily: 'ClashDisplayRegular' }}>
+                    Yet, we have
+                    &nbsp;
+                    <span style={{ fontSize: '50px', fontWeight: 'bold', fontFamily: 'ClashDisplaySemiBold' }}>{count}</span>
+                    &nbsp;
+                    Subscribers
+                  </Typography>
+                  <Typography textAlign='center' sx={{ color: '#1B2720', fontFamily: 'ClashDisplayRegular' }}>And still counting...</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -223,7 +236,7 @@ function App() {
                 </Grid>
               </Grid>
             </Grid> : null}
-            <BasicModal open={open} subscribeAmount={payment} />
+            {/* <BasicModal open={open} subscribeAmount={payment} /> */}
 
           </Grid>
         </Container >

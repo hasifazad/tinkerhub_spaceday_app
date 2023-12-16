@@ -18,25 +18,25 @@ function ProgressBar({ total, count }) {
   return (
     <>
 
-      <Box sx={{ display: 'flex', justifyContent: 'end', marginBottom: '5px' }}>
-        {/* <Box sx={{ border: '3px solid', borderRadius: '50px', width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'end', marginBottom: '5px' }}>
+        <Box sx={{ border: '3px solid', borderRadius: '50px', width: '50px', height: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Typography variant='h5' color='error'>
             {count}
           </Typography>
-        </Box> */}
+        </Box>
 
         <div className="tooltip-container">
           <div className="tooltip">
             <Typography variant='h5'>100k</Typography>
           </div>
         </div>
-      </Box>
+      </Box> */}
 
       <div>
         <div className='progressbar'>
           <div
             style={{
-              height: "100%",
+              height: '100%',
               width: `${filled}%`,
               transition: 'width 4s ease',
 
@@ -44,11 +44,11 @@ function ProgressBar({ total, count }) {
             className='completedBar'
           >
             <div className='progressPercent'>
-              <div>
+              {/* <div>
                 <Typography variant='h3'>
                   ₹{filled * 1000}
                 </Typography>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
