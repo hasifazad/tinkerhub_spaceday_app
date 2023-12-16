@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import ProgressBar from '@ramonak/react-progress-bar'
 import Lottie from 'react-lottie'
 import { Button, Container, Grid, Stack, Typography } from '@mui/material'
-import { Box, width } from '@mui/system'
+import { Box, display, width } from '@mui/system'
 
 import animationData from './assets/celeb.json'
 import animationFund from './assets/fund.json'
@@ -17,6 +17,11 @@ import NameRole from './components/NameRole/NameRole'
 import Myprogress from './components/ProgressBar/ProgressBar'
 import { Socket, io } from 'socket.io-client'
 
+import { createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import BubbleContainer from './components/Bubble/Bubble'
+import tinkerLogo from './assets/tinkerlogo.png'
+
 
 
 
@@ -28,15 +33,22 @@ let data = [
 
 function App() {
 
+  const theme = createTheme({
+    typography: {
+      fontFamily: 'Inter, sans-serif', // Replace with your preferred font family
+    },
+  });
+
   let RAZORPAY_URL = import.meta.env.VITE_RAZORPAY_URL
   let RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID
   let RAZORPAY_KEY_SECRET = import.meta.env.VITE_RAZORPAY_KEY_SECRET
 
   let [payeeArray, setPayeeArray] = useState([...data])
   let [payee, setPayee] = useState('hasif')
-  let [open, setOpen] = useState(false)
+  let [open, setOpen] = useState(true)
   let [total, setTotal] = useState(0)
   let [payment, setPayment] = useState(0)
+  let [count, setCount] = useState(0)
 
   let socket = useRef()
 
@@ -60,6 +72,8 @@ function App() {
       setTotal((prevTotal) => prevTotal + res.amountDonated)
       setOpen(true)
 
+      setCount((c) => c + 1)
+
       setTimeout(() => {
         setOpen(false)
       }, 3000)
@@ -76,17 +90,21 @@ function App() {
   useEffect(() => {
 
     axios.get('http://tinker.grocy.online/payment/total').then((res) => {
-      console.log(res);
+      // console.log(res);
       setTotal(res.data.totalDonation)
     }).catch((err) => {
       console.log(err);
     })
 
-    // axios.get('http://tinker.grocy.online/subcription/all').then((res) => {
-    //   console.log(res);
-    // }).catch((err) => {
-    //   console.log(err);
-    // })
+    axios.get('http://tinker.grocy.online/subcription/all').then((res) => {
+      // console.log(res);
+      let c = res.data.result.length
+      setCount(c)
+    }).catch((err) => {
+      console.log(err);
+    })
+    setTimeout(() => { setOpen(false) }, 3000)
+
   }, [])
 
 
@@ -120,84 +138,96 @@ function App() {
 
   return (
     <>
-      <Container sx={{ paddingTop: '5rem', display: 'flex', alignItems: 'center' }}>
-        <Grid container alignItems='center'>
+      <ThemeProvider theme={theme}>
+        <Container sx={{ paddingTop: '5rem', display: 'flex', alignItems: 'center' }}>
+          <Grid container alignItems='center'>
 
 
-          <Grid item xs={12} >
-            <Grid container display='flex' justifyContent='space-between'>
+            <Grid item xs={12} >
+              <Grid container display='flex' justifyContent='space-between'>
 
-              {/* <Grid item xs={4}>
+                {/* <Grid item xs={4}>
                 {time ? <Timer expiryTimestamp={t} /> : <Typography variant='h2'>00:00:00</Typography>}
               </Grid> */}
 
-              <Grid item xs={6}>
-                <Typography fontWeight={600} variant='h3' color='error'>BE A PATRON</Typography>
-                {/* <Typography variant='h5' textAlign='end'>
+                <Grid item xs={6}>
+                  <Typography theme={theme} fontWeight={600} variant='h3' color='error'>BE A PATRON</Typography>
+                  {/* <Typography variant='h5' textAlign='end'>
                   We are <span style={{ fontWeight: 'bold', fontSize: '30px', color: 'green' }}>₹{100000 - total}</span> closer to reach our goal!🤩
                 </Typography> */}
-              </Grid>
-              <Grid item xs={6} display='flex' justifyContent='end' alignItems='center'>
-                <img src='https://www.tinkerhub.org/files/LogoBLACK.png' alt='tinkerhub_logo' height={25} width={150} />
-              </Grid>
-              {/* <Grid item display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
+                </Grid>
+                <Grid item xs={6} display='flex' justifyContent='end' alignItems='center'>
+                  <img src={tinkerLogo} alt='tinkerhub_logo' height={100} width={200} />
+                </Grid>
+                {/* <Grid item display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
                 <Typography textAlign='center' variant='h4'>01/01/2023</Typography>
                 <br />
                 <Typography textAlign='center' variant='h4'>11:02:45</Typography>
               </Grid> */}
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} paddingTop={12} paddingBottom={3}>
-            {/* <Typography sx={{ fontWeight: 'bold' }} variant='h4' textAlign='end'> ₹ 100K</Typography> */}
-            <Myprogress total={total} />
-          </Grid>
-
-          <Grid item xs={12} >
-            <Grid container justifyContent='space-between'>
-
-              <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
-                {/* <NameRole people={payeeArray} /> */}
-                <BasicModal open={open} subscribeAmount={payment} />
               </Grid>
+            </Grid>
 
-              {/* <Grid item xs={4} >
-                <Lottie
+            <Grid item xs={12} paddingTop={6} paddingBottom={3}>
+              {/* <Typography sx={{ fontWeight: 'bold' }} variant='h4' textAlign='end'> ₹ 100K</Typography> */}
+              <Myprogress total={total} count={count} />
+            </Grid>
+
+            <Grid item xs={12} >
+              <Grid container justifyContent='center'>
+
+                <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
+                  {/* <NameRole people={payeeArray} /> */}
+
+                  {/* <BubbleContainer numberOfBubbles={10} /> */}
+                </Grid>
+
+                <Grid item xs={4} display='flex' flexDirection='column' justifyContent='center' alignItems='center' paddingTop={3}>
+                  <Box sx={{ borderRadius: '50%', width: '175px', height: '175px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                    <Typography variant='h1' color='error' display='flex' justifyContent='center'>
+                      {count}
+                    </Typography>
+                    <Typography display='flex' justifyContent='center' width='190px'>
+                      Subscribers
+                    </Typography>
+                  </Box>
+
+                  {/* <Lottie
                   options={{ ...animationData, animationData: animationFund }}
                   height={225}
                   width={225}
-                />
-              </Grid> */}
+                /> */}
+                </Grid>
 
-              {/* <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
-                <img src={tinkerqr} height={250} width={250} />
-              </Grid> */}
+                <Grid item xs={4} display='flex' justifyContent='center' alignItems='center'>
+                  {/* <img src={tinkerqr} height={250} width={250} /> */}
+
+                </Grid>
+              </Grid>
             </Grid>
+
+            {open ? <Grid item xs={12} width='75%' height='85vh' position='absolute' top={0} zIndex={99}>
+              <Grid container justifyContent='center'  >
+                <Grid item xs={6}>
+                  <Lottie
+                    options={{ ...defaultOptions, animationData }}
+                    height={600}
+                    width={400}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Lottie
+                    options={{ ...defaultOptions, animationData }}
+                    height={600}
+                    width={400}
+                  />
+                </Grid>
+              </Grid>
+            </Grid> : null}
+            <BasicModal open={open} subscribeAmount={payment} />
+
           </Grid>
-
-          {open ? <Grid item xs={12} width='75%' height='85vh' position='absolute' top={0}>
-            <Grid container justifyContent='center'  >
-              <Grid item xs={6}>
-                <Lottie
-                  options={{ ...defaultOptions, animationData }}
-                  height={600}
-                  width={400}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Lottie
-                  options={{ ...defaultOptions, animationData }}
-                  height={600}
-                  width={400}
-                />
-              </Grid>
-            </Grid>
-          </Grid> : null}
-
-
-        </Grid>
-      </Container >
-
+        </Container >
+      </ThemeProvider>
 
     </>
   )

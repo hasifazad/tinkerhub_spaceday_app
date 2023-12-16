@@ -11,16 +11,16 @@ import { Fade } from '@mui/material';
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '30%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '10rem',
-    bgcolor: 'background.paper',
-    // 
+    width: '15rem',
+    // bgcolor: 'background.paper',
     // border: '2px solid #000',
     boxShadow: 24,
-    // p: 4,
-    borderRadius: '5px'
+    p: 4,
+    // borderRadius: '5px'
+    // border:'0px solid'
 };
 
 const defaultOptions = {
@@ -33,7 +33,8 @@ const defaultOptions = {
 };
 
 const TransparentBackdrop = styled('div')({
-    background: 'rgba(0, 0, 0, 0)', // Fully transparent black
+    background: 'rgba(0, 0, 0, 0)',
+
 });
 
 export default function BasicModal({ open, subscribeAmount }) {
@@ -52,10 +53,16 @@ export default function BasicModal({ open, subscribeAmount }) {
                 aria-describedby="modal-modal-description"
                 // style={{ backgroundColor: '', opacity: 1 }}
                 BackdropComponent={TransparentBackdrop}
-            >
 
+            >
                 <Fade in={open}>
                     <Box sx={style} >
+                        {/* <Box  >
+                        <Lottie
+                            options={{ ...animationData, animationData }}
+                            height={100}
+                            width={100} />
+                    </Box> */}
                         <Box >
                             <Typography textAlign='center' id="modal-modal-title" variant="h4" component="h2">
                                 {/* Thankyou for your support!
@@ -63,12 +70,7 @@ export default function BasicModal({ open, subscribeAmount }) {
                                 +{subscribeAmount}
                             </Typography>
                         </Box>
-                        {/* <Box  >
-                        <Lottie
-                            options={{ ...animationData, animationData }}
-                            height={100}
-                            width={100} />
-                    </Box> */}
+
                     </Box>
                 </Fade>
 
